@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Calculator</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    .container__inputs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .container__inputs input {
+      width: 60px;
+      padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+
+    .container__button {
+      background-color: #2835ad;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .result h2 {
+      margin: 10px 0;
+      font-size: 24px;
+    }
+
+    .result span {
+      font-weight: bold;
+    }
+
+    .result span:first-child {
+      color: #2835ad;
+      font-size: 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="container__inputs">
+      <input type="number" id="day" placeholder="Day" value="24" min="1" max="31">
+      <input type="number" id="month" placeholder="Month" value="9" min="1" max="12">
+      <input type="number" id="year" placeholder="Year" value="1984" min="1900" max="2100">
+    </div>
+    <button class="container__button" id="calculate">Calculate</button>
+    <div class="result">
+      <h2><span id="years">--</span> years</h2>
+      <h2><span id="months">--</span> months</h2>
+      <h2><span id="days">--</span> days</h2>
+    </div>
+  </div>
+
+  <script>
+    $('#calculate').on('click', function () {
+      const day = parseInt($('#day').val(), 10);
+      const month = parseInt($('#month').val(), 10) - 1;
+      const year = parseInt($('#year').val(), 10);
+
+      const birthDate = new Date(year, month, day);
+      const today = new Date();
+
+      let years = today.getFullYear() - birthDate.getFullYear();
+      let months = today.getMonth() - birthDate.getMonth();
+      let days = today.getDate() - birthDate.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      $('#years').text(years);
+      $('#months').text(months);
+      $('#days').text(days);
+    });
+  </script>
+
+</body>
+</html>

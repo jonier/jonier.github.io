@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Carousel</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .carousel {
+      width: 600px;
+      text-align: center;
+    }
+
+    .carousel__container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .carousel__item {
+      text-align: center;
+      background-color: turquoise;
+    }
+
+    .carousel__item img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .carousel__buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .carousel__buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #2835ad;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .carousel__buttons button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="carousel">
+    <div class="carousel__container">
+      <div class="carousel__item">
+        <img id="pokemon-image-1" src="" alt="Pokemon 1">
+        <h2 id="pokemon-name-1">Loading...</h2>
+      </div>
+      <div class="carousel__item">
+        <img id="pokemon-image-2" src="" alt="Pokemon 2">
+        <h2 id="pokemon-name-2">Loading...</h2>
+      </div>
+      <div class="carousel__item">
+        <img id="pokemon-image-3" src="" alt="Pokemon 3">
+        <h2 id="pokemon-name-3">Loading...</h2>
+      </div>
+    </div>
+    <div class="carousel__buttons">
+      <button id="next">Next</button>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+
+      // Function to fetch and display 3 Pokémons
+      function fetchPokemons() {
+        const ale = Math.floor(Math.random() * 1000) + 1;
+        for (let i = 0; i < 3; i++) {
+          const pokemonId = ale + i;
+          $.ajax({
+            url: `https://pokeapi.co/api/v2/pokemon/${pokemonId}/`,
+            method: 'GET',
+            success: function (data) {
+              $(`#pokemon-image-${i + 1}`).attr('src', data.sprites.front_default);
+              $(`#pokemon-name-${i + 1}`).text(data.name.charAt(0).toUpperCase() + data.name.slice(1));
+            },
+            error: function () {
+              $(`#pokemon-image-${i + 1}`).attr('src', '');
+              $(`#pokemon-name-${i + 1}`).text('Not Found');
+            }
+          });
+        }
+
+      }
+
+      // Initial fetch
+      fetchPokemons();
+
+      $('#next').on('click', function () {
+        fetchPokemons();
+      });
+    });
+  </script>
+
+</body>
+</html>
